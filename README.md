@@ -2,6 +2,8 @@
 
 A mobile-friendly wallet UI flow developed as an interview work assessment for the Global Impact Payment App. This project demonstrates a modern, user-friendly digital wallet interface built with Next.js, TypeScript, and Tailwind CSS.
 
+## Live link
+Check out the app [here](https://global-impact-wallet.vercel.app/auth/sign-up)
 ## Featured Screens
 
 ### Authentication
