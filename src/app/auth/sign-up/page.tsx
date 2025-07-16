@@ -4,16 +4,39 @@ import { Input } from "@/components/Input";
 import { Check } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function SignUp() {
-  const [textValue, setTextValue] = useState("");
+  const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
+  const [confirmPasswordValue, setConfirmPasswordValue] = useState("");
   const [isChecked, setIsChecked] = useState(false);
+  const [showTermsError, setShowTermsError] = useState(false);
+  const router = useRouter();
 
   const handleChange = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setIsChecked(!isChecked);
+    if (showTermsError) {
+      setShowTermsError(false);
+    }
+  };
+
+  const handleSignUp = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+
+    if (!isChecked) {
+      setShowTermsError(true);
+      return;
+    }
+    if (!emailValue || !passwordValue) {
+      toast.error("Enter all details");
+      return;
+    }
+    toast.success("Success");
+    router.push("/dashboard");
   };
 
   return (
@@ -39,11 +62,11 @@ export default function SignUp() {
         <form action="">
           <div>
             <Input
-              type="text"
+              type="email"
               label="Email Address"
               placeholder=""
-              value={textValue}
-              onChange={setTextValue}
+              value={emailValue}
+              onChange={setEmailValue}
               required
             />
           </div>
@@ -62,9 +85,15 @@ export default function SignUp() {
               type="password"
               label="Confirm Password"
               placeholder=""
-              value={passwordValue}
-              onChange={setPasswordValue}
+              value={confirmPasswordValue}
+              onChange={(value) => setConfirmPasswordValue(value)}
               required
+              customValidation={(value) => {
+                if (value && passwordValue && value !== passwordValue) {
+                  return "Passwords do not match";
+                }
+                return null;
+              }}
             />
           </div>
           <div className="flex items-start gap-3 mt-4">
@@ -81,11 +110,18 @@ export default function SignUp() {
             w-5 h-5 border-2 rounded cursor-pointer transition-all duration-200
             ${
               isChecked
-                ? "bg-blue-500 border-blue-500"
-                : "border-gray-300 hover:border-gray-400"
+                ? "bg-primary-500 border-primary-500"
+                : showTermsError
+                ? "border-red-500 hover:border-red-600"
+                : "border-secondary-300 hover:border-secondary-400"
             }
           `}
-                onClick={() => setIsChecked(!isChecked)}
+                onClick={() => {
+                  setIsChecked(!isChecked);
+                  if (showTermsError) {
+                    setShowTermsError(false);
+                  }
+                }}
               >
                 {isChecked && (
                   <Check
@@ -97,14 +133,40 @@ export default function SignUp() {
             </div>
 
             <div
-              className="text-primary-700 text-[15px] cursor-pointer select-none"
-              onClick={() => setIsChecked(!isChecked)}
+              className={`text-primary-700 text-[15px] cursor-pointer select-none ${
+                showTermsError ? "text-red-500" : ""
+              }`}
+              onClick={() => {
+                setIsChecked(!isChecked);
+                if (showTermsError) {
+                  setShowTermsError(false);
+                }
+              }}
             >
               I accept the <b className="font-semibold">Terms of Use</b> &{" "}
               <b className="font-semibold">Privacy Policy</b>.
             </div>
           </div>
-          <button className="bg-primary-500 text-white mt-16 w-full rounded-full p-4 text-text cursor-pointer">
+          {showTermsError && (
+            <p className="mt-2 text-red-500 text-sm flex items-center">
+              <svg
+                className="w-4 h-4 mr-1"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              You must accept the terms and conditions to continue
+            </p>
+          )}
+          <button
+            className="bg-primary-500 text-white mt-16 w-full rounded-full p-4 text-text cursor-pointer"
+            onClick={handleSignUp}
+          >
             Sign Up
           </button>
         </form>

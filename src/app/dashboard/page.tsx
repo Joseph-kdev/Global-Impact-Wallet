@@ -11,7 +11,15 @@ import TransactionItem from "@/components/TransactionItem";
 import Link from "next/link";
 import Navbar from "@/components/NavBar";
 
-// Dummy data for recent transactions
+export interface Transaction {
+  id: number;
+  type: string;
+  title: string;
+  description: string;
+  amount: number;
+  date: string;
+}
+
 export const recentTransactions = [
   {
     id: 1,
@@ -19,7 +27,7 @@ export const recentTransactions = [
     title: 'Balance Load',
     description: 'Added funds to wallet',
     amount: 1335.0,
-    date: '2025-07-15T14:30:00Z', // ISO string for dynamic formatting
+    date: '2025-07-15T14:30:00Z',
   },
   {
     id: 2,
@@ -53,6 +61,14 @@ export const recentTransactions = [
     amount: -89.5,
     date: '2025-07-11T14:30:00Z',
   },
+  {
+    id: 6,
+    type: 'debit',
+    title: 'Meyer Group',
+    description: 'Wellness products',
+    amount: -89.5,
+    date: '2025-07-11T14:30:00Z',
+  },
 ];
 
 const WalletOverviewScreen = () => {
@@ -79,7 +95,7 @@ const WalletOverviewScreen = () => {
           </div>
             <button
               onClick={() => setShowBalance(!showBalance)}
-              className="p-1 text-secondary-400 hover:text-secondary-600 transition-colors"
+              className="p-1 text-secondary-400 hover:text-secondary-600 transition-colors cursor-pointer"
             >
               {showBalance ? <Eye size={18} /> : <EyeOff size={18} />}
             </button>
@@ -92,16 +108,16 @@ const WalletOverviewScreen = () => {
             <p className="text-2xl text-primary-500 font-bold">
               1,596
             </p>
-            <div className="text-secondary-300">
+            <div className="text-secondary-300 cursor-pointer">
               <ArrowRight width={24}/>
             </div>
           </div>
           <div className="w-full grid grid-cols-2 gap-2 mt-4">
-            <button className="flex items-center gap-2 text-[15px] justify-center bg-primary-500 hover:bg-primary-700 text-white p-2 rounded-full">
+            <button className="flex items-center gap-2 text-[15px] justify-center bg-primary-500 hover:bg-primary-700 text-white p-2 rounded-full cursor-pointer">
               <Image src="/arrow-down-left.png" width={12} height={12} alt="*"/>
               <p>Add Balance</p>
             </button>
-            <button className="flex items-center gap-2 text-[15px] justify-center bg-primary-500 hover:bg-primary-700 text-white p-2 rounded-full">
+            <button className="flex items-center gap-2 text-[15px] justify-center bg-primary-500 hover:bg-primary-700 text-white p-2 rounded-full cursor-pointer">
             <Image src="/arrow-up-right.png" width={12} height={12} alt="*"/>
             <p>Pay</p>
             </button>

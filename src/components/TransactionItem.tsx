@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
+import { Transaction } from '@/app/dashboard/page';
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -11,7 +12,7 @@ const formatDate = (dateString: string) => {
   return `${time} | ${month} ${day}${suffix}`;
 };
 
-export default function TransactionItem({transactions}) {
+export default function TransactionItem({transactions}: {transactions: Transaction[]}) {
   return (
     <div className="mt-4">
       <div className="space-y-4">

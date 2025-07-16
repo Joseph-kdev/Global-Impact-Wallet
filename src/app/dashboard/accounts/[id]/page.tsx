@@ -1,17 +1,17 @@
 "use client";
 import React, { useState } from "react";
 import { Trash2 } from "lucide-react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { bankAccounts } from "../page";
 import TransactionItem from "@/components/TransactionItem";
 import { recentTransactions } from "../../page";
+import toast from "react-hot-toast";
 
 export default function BankDetail() {
   const [activeTab, setActiveTab] = useState("details");
   const params = useParams();
   const id = params.id as string;
-
-  console.log("parameter", id);
+  const router = useRouter()
 
   const bankAccount = bankAccounts.find((acc) => acc.id === parseInt(id));
 
@@ -20,12 +20,11 @@ export default function BankDetail() {
   }
 
   const handleRemoveCard = () => {
-    alert(
-      `Card ${bankAccount.name} ending in ${bankAccount.lastFourDigits} has been removed successfully!`
-    );
-    console.log(
-      `Removing card: ${bankAccount.name} - ${bankAccount.lastFourDigits}`
-    );
+    //delete logic
+
+    //then
+    toast.success(`Card ${bankAccount.name} has been removed successfully!`)
+    router.push("/dashboard")
   };
 
   return (
@@ -93,7 +92,7 @@ export default function BankDetail() {
             <div className="w-full flex justify-center">
               <button
                 onClick={handleRemoveCard}
-                className="mt-4 border-2 border-red-500 text-red-500 p-2 rounded-full flex items-center justify-center gap-2 hover:bg-red-50 transition-colors "
+                className="mt-4 border-2 border-red-500 text-red-500 p-2 rounded-full flex items-center justify-center gap-2 hover:bg-red-50 transition-colors cursor-pointer"
               >
                 <Trash2 width={20} />
                 <span className="font-medium">Remove Card</span>

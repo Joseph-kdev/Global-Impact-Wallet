@@ -26,7 +26,7 @@ export default function AccountPage() {
       </h2>
       <BankList accounts={bankAccounts} />
       <button
-        className="mt-4 w-full bg-primary-500 p-2 rounded-full flex justify-center items-center gap-2"
+        className="mt-4 w-full bg-primary-500 p-2 rounded-full flex justify-center items-center gap-2 cursor-pointer"
       >
         <Plus width={24} className="text-primary-100"/>
         <p className="text-[15px] text-white">Add New</p>

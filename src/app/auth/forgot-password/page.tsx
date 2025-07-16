@@ -1,17 +1,28 @@
 "use client";
 import { useState } from "react";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { Input } from "@/components/Input";
-import Link from "next/link";
+import toast from "react-hot-toast";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async () => {
+    if (!email) {
+      toast.error("Please provide an email");
+      return;
+    }
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsSubmitted(true);
-    redirect("/auth/forgot-password/verify");
+    toast.success("Submitted");
+    redirect("/");
+  };
+
+  const handleOtpSend = async () => {
+    toast.success(`OTP sent`);
+    router.push("/auth/forgot-password/otp");
   };
 
   return (
@@ -24,24 +35,27 @@ export default function ForgotPassword() {
         send a link to reset your password.
       </p>
       <div className="mt-12">
-      <Input
-        type="email"
-        label="Email Address"
-        placeholder=""
-        value={email}
-        onChange={setEmail}
-        disabled={isSubmitted}
-      />
+        <Input
+          type="email"
+          label="Email Address"
+          placeholder=""
+          value={email}
+          onChange={setEmail}
+          disabled={isSubmitted}
+        />
       </div>
       <button
         className="bg-primary-500 mt-12 w-full rounded-full p-4 text-white cursor-pointer text-[16px]"
         onClick={handleSubmit}
-        disabled={isSubmitted || !email}
+        disabled={isSubmitted}
       >
         Submit
       </button>
-      <button className="text-[17px] mt-4 w-full rounded-full p-2 text-primary-500 cursor-pointer">
-        <Link href="/auth/forgot-password/otp">Send OTP</Link>
+      <button
+        className="text-[17px] mt-4 w-full rounded-full p-2 text-primary-500 cursor-pointer"
+        onClick={handleOtpSend}
+      >
+        Send OTP
       </button>
     </div>
   );

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { redirect } from "next/navigation";
-import Link from "next/link";
+import toast from "react-hot-toast";
 
 export default function VerifyOTP() {
   const [isVerified, setIsVerified] = useState(false);
@@ -35,8 +35,19 @@ export default function VerifyOTP() {
   }, []);
 
   const handleSubmit = async () => {
+    const filledOtp = otp.filter(digit => digit !== "");
+    
+    if(filledOtp.length === 0) {
+      toast.error("Please enter OTP")
+      return
+    } else if (filledOtp.length !== 6) {
+      toast.error("Enter all OTP values")
+      return
+    }
+    
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsVerified(true);
+    toast.success("Success")
     redirect("/auth/forgot-password/new-password");
   };
 
@@ -66,13 +77,11 @@ export default function VerifyOTP() {
         onClick={handleSubmit}
         disabled={isVerified}
       >
-        <Link href="/auth/forgot-password/reset-password">
           {isVerified ? "Verifying..." : "Proceed"}
-        </Link>
       </button>
       <p className="text-center text-[17px] mt-8 text-secondary-500">
-        Didn’t receive the OTP?{" "}
-        <span className="text-primary-500 mt-4">Resend OTP</span>
+        Didn&apos;t receive the OTP?{" "}
+        <span className="text-primary-500 mt-4 cursor-pointer">Resend OTP</span>
       </p>
     </div>
   );
